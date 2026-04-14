@@ -11,6 +11,8 @@ import PosterMaker from "./pages/PosterMaker";
 import MarketingPhrases from "./pages/MarketingPhrases";
 import Subscriptions from "./pages/Subscriptions";
 import Support from "./pages/Support";
+import Analytics from "./pages/Analytics";
+import Campaigns from "./pages/Campaigns";
 
 function Router() {
   // make sure to consider if you need authentication for certain routes
@@ -23,6 +25,8 @@ function Router() {
       <Route path={"/marketing-phrases"} component={MarketingPhrases} />
       <Route path={"/subscriptions"} component={Subscriptions} />
       <Route path={"/support"} component={Support} />
+      <Route path={"/analytics"} component={Analytics} />
+      <Route path={"/campaigns"} component={Campaigns} />
       <Route path={"/404"} component={NotFound} />
       {/* Final fallback route */}
       <Route component={NotFound} />
