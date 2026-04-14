@@ -1,63 +1,75 @@
-import { describe, it, expect, beforeEach, vi } from "vites":
-import axios from "axios";
+const express = require('express');
+const axios = require('axios');
+require('dotenv').config();
 
-// Mock axios
-vi.mock("axios");
+const app = express();
 
-describe("Salla OAuth Callback", () => {
-  beforeEach(() => {
-    vi.clearAllMocks();
-  });
+app.get('/callback', async (req, res) => {
+  const { code } = req.query;
 
-  it("يجب أن تكون بيانات سلة معرفة في متغيرات البيئة", () => {
-    const sallaClientId = process.env.SALLA_CLIENT_ID;
-    const sallaClientSecret = process.env.SALLA_CLIENT_SECRET;
+  if (!code) {
+    return res.send('No code provided');
+  }
 
-    expect(sallaClientId).toBeDefined();
-    expect(sallaClientSecret).toBeDefined();
-    expect(sallaClientId).toBe("7e42b932-6690-477d-aba0-a9fca78047e5");
-    expect(sallaClientSecret).toBe(
-      "500e2b09edadf85df68b8b4b70dffabb60a81474007a5a32f801b825716b6c32"
-    );
-  });
+  try {
+    const response = await axios.post('const express = require('express');
+const axios = require('axios');
+require('dotenv').config();
 
-  it("يجب أن تكون بيانات سلة غير فارغة", () => {
-    const sallaClientId = process.env.SALLA_CLIENT_ID;
-    const sallaClientSecret = process.env.SALLA_CLIENT_SECRET;
+const app = express();
 
-    expect(sallaClientId).not.toBe("");
-    expect(sallaClientSecret).not.toBe("");
-    expect(sallaClientId?.length).toBeGreaterThan(0);
-    expect(sallaClientSecret?.length).toBeGreaterThan(0);
-  });
+app.get('/callback', async (req, res) => {
+  const { code } = req.query;
 
-  it("يجب أن يكون Callback URL صحيحاً", () => {
-    const callbackUrl = "https://rexo-markitng.onrender.com/callback/
-    expect(callbackUrl).toContain("rexomarketing");
-    expect(callbackUrl).toContain("callback");
-    expect(callbackUrl).toMatch(/^https:\/\//);
-  });
+  if (!code) {
+    return res.send('No code provided');
+  }
 
-  it("يجب أن تكون بيانات سلة بالصيغة الصحيحة", () => {
-    const sallaClientId = process.env.SALLA_CLIENT_ID;
-    const sallaClientSecret = process.env.SALLA_CLIENT_SECRET;
+  try {
+    const response = await axios.post('https://accounts.salla.sa/oauth2/token', {
+      grant_type: 'authorization_code',
+      client_id: process.env.CLIENT_ID, 7e42b932-6690-477d-aba0-a9fca78047e5
+      client_secret: process.env.CLIENT_SECRET, 500e2b09edadf85df68b8b4b70dffabb60a81474007a5a32f801b825716b6c32
+      redirect_uri: process.env.REDIRECT_URI,https://rexo-markitng.onrender.com/callback/
+      code: code
+    });
 
-    // التحقق من صيغة Client ID (UUID format)
-    const uuidRegex =
-      /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
-    expect(sallaClientId).toMatch(uuidRegex);
+    const data = response.data;
 
-    // التحقق من صيغة Client Secret (hex string)
-    const hexRegex = /^[0-9a-f]+$/i;
-    expect(sallaClientSecret).toMatch(hexRegex);
-  });
+    // 🔹 هنا تحفظ البيانات في قاعدة البيانات
+    console.log('Access Token:', data.access_token);
+    console.log('Refresh Token:', data.refresh_token);
+    console.log('Store ID:', data.merchant);
 
-  it("يجب أن تكون بيانات سلة متطابقة مع المدخلات", () => {
-    const expectedClientId = "7e42b932-6690-477d-aba0-a9fca78047e5";
-    const expectedClientSecret =
-      "500e2b09edadf85df68b8b4b70dffabb60a81474007a5a32f801b825716b6c32";
+    res.send('تم ربط المتجر بنجاح ✅');
 
-    expect(process.env.SALLA_CLIENT_ID).toBe(expectedClientId);
-    expect(process.env.SALLA_CLIENT_SECRET).toBe(expectedClientSecret);
-  });
+  } catch (error) {
+    console.error(error.response?.data || error.message);
+    res.send('حدث خطأ أثناء الربط ❌');
+  }
 });
+
+app.listen(3000, () => console.log('Server running...'));oauth2/token', {
+      grant_type: 'authorization_code',
+      client_id: process.env.CLIENT_ID,
+      client_secret: process.env.CLIENT_SECRET,
+      redirect_uri: process.env.REDIRECT_URI,
+      code: code
+    });
+
+    const data = response.data;
+
+    // 🔹 هنا تحفظ البيانات في قاعدة البيانات
+    console.log('Access Token:', data.access_token);
+    console.log('Refresh Token:', data.refresh_token);
+    console.log('Store ID:', data.merchant);
+
+    res.send('تم ربط المتجر بنجاح ✅');
+
+  } catch (error) {
+    console.error(error.response?.data || error.message);
+    res.send('حدث خطأ أثناء الربط ❌');
+  }
+});
+
+app.listen(3000, () => console.log('Server running...'));
