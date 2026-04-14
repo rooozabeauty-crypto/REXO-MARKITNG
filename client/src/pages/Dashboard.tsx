@@ -1,244 +1,266 @@
+import { useState } from "react";
 import { useAuth } from "@/_core/hooks/useAuth";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { useLocation } from "wouter";
+import { Input } from "@/components/ui/input";
 import {
+  Search,
   BarChart3,
-  TrendingUp,
-  Users,
+  Settings,
   Palette,
   MessageSquare,
-  Settings,
-  LogOut,
-  Menu,
-  X,
-  Home,
-  Search,
-  PieChart,
-  Zap,
   DollarSign,
   Package,
   Share2,
+  Zap,
   Star,
   Mail,
   CreditCard,
-  HelpCircle
+  LogOut,
+  Menu,
+  X,
+  TrendingUp,
+  Users,
+  ShoppingCart,
+  Sparkles,
 } from "lucide-react";
-import { useState } from "react";
+import { useLocation } from "wouter";
+import { toast } from "sonner";
+import { trpc } from "@/lib/trpc";
 
 export default function Dashboard() {
-  const { user, logout, loading } = useAuth();
+  const { user, logout } = useAuth();
   const [, navigate] = useLocation();
-  const [sidebarOpen, setSidebarOpen] = useState(true);
-
-  if (loading) {
-    return (
-      <div className="flex items-center justify-center min-h-screen">
-        <div className="text-center">
-          <div className="w-12 h-12 border-4 border-accent border-t-transparent rounded-full animate-spin mx-auto mb-4" />
-          <p className="text-muted-foreground">جاري التحميل...</p>
-        </div>
-      </div>
-    );
-  }
-
-  if (!user) {
-    navigate("/");
-    return null;
-  }
-
-  const services = [
-    { icon: Search, label: "تحسين محرك البحث", path: "/marketing-phrases", color: "from-blue-500" },
-    { icon: BarChart3, label: "تحليل الأداء", path: "/analytics", color: "from-green-500" },
-    { icon: Settings, label: "الإعدادات", path: "/settings", color: "from-slate-500" },
-    { icon: Palette, label: "Poster Maker", path: "/poster-maker", color: "from-pink-500" },
-    { icon: MessageSquare, label: "المساعد الذكي لورا", path: "/lora", color: "from-yellow-500" },
-    { icon: DollarSign, label: "المحاسب المالي", path: "/accounting", color: "from-emerald-500" },
-    { icon: Package, label: "مخزون المتجر", path: "/inventory", color: "from-cyan-500" },
-    { icon: Share2, label: "وسائل التواصل", path: "/social-media", color: "from-red-500" },
-    { icon: Zap, label: "الحملات الإعلانية", path: "/campaigns", color: "from-orange-500" },
-    { icon: Star, label: "التقييمات والتعليقات", path: "/reviews", color: "from-indigo-500" },
-    { icon: Mail, label: "الطلبات والمبيعات", path: "/orders", color: "from-rose-500" },
-    { icon: CreditCard, label: "الاشتراكات", path: "/subscriptions", color: "from-violet-500" },
-  ];
+  const [searchTerm, setSearchTerm] = useState("");
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const handleLogout = async () => {
     await logout();
     navigate("/");
   };
 
+  const logoutMutation = trpc.auth.logout.useMutation({
+    onSuccess: handleLogout,
+  });
+
+  if (!user) {
+    return null;
+  }
+
+  // قائمة الخدمات المنظمة بشكل منطقي
+  const serviceCategories = [
+    {
+      name: "التسويق الرقمي",
+      icon: Sparkles,
+      color: "from-purple-500 to-pink-500",
+      services: [
+        { icon: Search, label: "تحسين محرك البحث", path: "/marketing-phrases", color: "from-blue-500" },
+        { icon: Zap, label: "الحملات الإعلانية", path: "/campaigns", color: "from-orange-500" },
+        { icon: Share2, label: "وسائل التواصل", path: "/social-media", color: "from-red-500" },
+        { icon: MessageSquare, label: "المساعد الذكي لورا", path: "/lora", color: "from-yellow-500" },
+      ],
+    },
+    {
+      name: "الإدارة والمبيعات",
+      icon: ShoppingCart,
+      color: "from-green-500 to-emerald-500",
+      services: [
+        { icon: Package, label: "مخزون المتجر", path: "/inventory", color: "from-cyan-500" },
+        { icon: Mail, label: "الطلبات والمبيعات", path: "/orders", color: "from-rose-500" },
+        { icon: DollarSign, label: "المحاسب المالي", path: "/accounting", color: "from-emerald-500" },
+        { icon: BarChart3, label: "تحليل الأداء", path: "/analytics", color: "from-green-500" },
+      ],
+    },
+    {
+      name: "التصميم والمحتوى",
+      icon: Palette,
+      color: "from-pink-500 to-rose-500",
+      services: [
+        { icon: Palette, label: "Poster Maker", path: "/poster-maker", color: "from-pink-500" },
+        { icon: MessageSquare, label: "العبارات التسويقية", path: "/marketing-phrases-new", color: "from-indigo-500" },
+        { icon: Star, label: "القوالب الجاهزة", path: "/templates", color: "from-yellow-500" },
+        { icon: Users, label: "محرر المنتجات", path: "/product-editor", color: "from-blue-500" },
+      ],
+    },
+    {
+      name: "الإدارة والإعدادات",
+      icon: Settings,
+      color: "from-slate-500 to-gray-500",
+      services: [
+        { icon: Star, label: "التقييمات والتعليقات", path: "/reviews", color: "from-indigo-500" },
+        { icon: CreditCard, label: "الاشتراكات", path: "/subscriptions", color: "from-violet-500" },
+        { icon: Settings, label: "الإعدادات", path: "/settings", color: "from-slate-500" },
+        { icon: Mail, label: "الدعم والتواصل", path: "/support", color: "from-cyan-500" },
+      ],
+    },
+  ];
+
+  // إحصائيات سريعة
+  const stats = [
+    { label: "إجمالي المبيعات", value: "45,230 ر.س", icon: TrendingUp, color: "from-green-500" },
+    { label: "عدد العملاء", value: "1,234", icon: Users, color: "from-blue-500" },
+    { label: "الطلبات المعلقة", value: "23", icon: ShoppingCart, color: "from-orange-500" },
+    { label: "معدل التحويل", value: "3.8%", icon: Sparkles, color: "from-purple-500" },
+  ];
+
+  const filteredCategories = serviceCategories.map((cat) => ({
+    ...cat,
+    services: cat.services.filter(
+      (s) => s.label.includes(searchTerm) || searchTerm === ""
+    ),
+  }));
+
   return (
-    <div className="flex h-screen bg-background">
-      {/* Sidebar */}
-      <div
-        className={`fixed inset-y-0 left-0 z-40 w-64 bg-sidebar border-r border-sidebar-border transition-transform duration-300 ${
-          sidebarOpen ? "translate-x-0" : "-translate-x-full"
-        } md:translate-x-0 md:static`}
-      >
-        <div className="flex flex-col h-full">
-          {/* Logo */}
-          <div className="p-6 border-b border-sidebar-border">
+    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950">
+      {/* Header */}
+      <header className="sticky top-0 z-50 bg-slate-950/95 backdrop-blur border-b border-slate-800">
+        <div className="container max-w-7xl mx-auto px-4 py-4">
+          <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-gradient-to-br from-accent to-secondary rounded-lg flex items-center justify-center">
-                <span className="text-sidebar-foreground font-bold">R</span>
+              <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-amber-500 to-orange-600 flex items-center justify-center">
+                <span className="text-white font-bold text-lg">R</span>
               </div>
               <div>
-                <h1 className="font-bold text-sidebar-foreground">REXO</h1>
-                <p className="text-xs text-sidebar-accent">منصة تسويق ذكية</p>
+                <h1 className="text-xl font-bold text-white">REXO</h1>
+                <p className="text-xs text-amber-500">منصة تسويق ذكية</p>
               </div>
+            </div>
+
+            <div className="hidden md:flex items-center gap-4 flex-1 mx-8">
+              <div className="relative flex-1 max-w-md">
+                <Search className="absolute right-3 top-3 w-4 h-4 text-slate-500" />
+                <Input
+                  placeholder="ابحث عن خدمة..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="bg-slate-800 border-slate-700 pr-10 text-white placeholder:text-slate-500"
+                />
+              </div>
+            </div>
+
+            <div className="flex items-center gap-4">
+              <div className="hidden md:flex items-center gap-3 px-4 py-2 rounded-lg bg-slate-800">
+                <div className="w-8 h-8 rounded-full bg-gradient-to-br from-amber-500 to-orange-600 flex items-center justify-center">
+                  <span className="text-white text-sm font-bold">{user.name?.[0] || "U"}</span>
+                </div>
+                <div className="text-sm">
+                  <p className="text-white font-medium">{user.name || "المستخدم"}</p>
+                  <p className="text-xs text-slate-400">{user.email}</p>
+                </div>
+              </div>
+
+              <Button
+                onClick={() => logoutMutation.mutate()}
+                variant="outline"
+                className="border-slate-700 text-slate-300 hover:bg-slate-800 gap-2"
+              >
+                <LogOut className="w-4 h-4" />
+                <span className="hidden md:inline">تسجيل خروج</span>
+              </Button>
+
+              <button
+                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                className="md:hidden p-2 hover:bg-slate-800 rounded-lg"
+              >
+                {mobileMenuOpen ? (
+                  <X className="w-5 h-5 text-white" />
+                ) : (
+                  <Menu className="w-5 h-5 text-white" />
+                )}
+              </button>
             </div>
           </div>
 
-          {/* Navigation */}
-          <nav className="flex-1 overflow-y-auto p-4 space-y-2">
-            <button className="w-full flex items-center gap-3 px-4 py-3 rounded-lg bg-sidebar-accent text-sidebar-accent-foreground font-medium transition-colors">
-              <Home className="w-5 h-5" />
-              <span>الرئيسية</span>
-            </button>
-
-            <div className="pt-4">
-              <p className="px-4 text-xs font-semibold text-sidebar-accent uppercase tracking-wider mb-3">
-                الخدمات
-              </p>
-              <div className="space-y-1">
-                {services.slice(0, 6).map((service, idx) => (
-                  <button
-                    key={idx}
-                    onClick={() => navigate(service.path)}
-                    className="w-full flex items-center gap-3 px-4 py-2 rounded-lg text-sidebar-foreground hover:bg-sidebar-accent/20 transition-colors text-sm"
-                  >
-                    <service.icon className="w-4 h-4" />
-                    <span>{service.label}</span>
-                  </button>
-                ))}
-              </div>
+          {/* Mobile Search */}
+          <div className="md:hidden mt-4">
+            <div className="relative">
+              <Search className="absolute right-3 top-3 w-4 h-4 text-slate-500" />
+              <Input
+                placeholder="ابحث عن خدمة..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="bg-slate-800 border-slate-700 pr-10 text-white placeholder:text-slate-500"
+              />
             </div>
-
-            <div className="pt-4">
-              <p className="px-4 text-xs font-semibold text-sidebar-accent uppercase tracking-wider mb-3">
-                المزيد
-              </p>
-              <div className="space-y-1">
-                {services.slice(6).map((service, idx) => (
-                  <button
-                    key={idx}
-                    onClick={() => navigate(service.path)}
-                    className="w-full flex items-center gap-3 px-4 py-2 rounded-lg text-sidebar-foreground hover:bg-sidebar-accent/20 transition-colors text-sm"
-                  >
-                    <service.icon className="w-4 h-4" />
-                    <span>{service.label}</span>
-                  </button>
-                ))}
-              </div>
-            </div>
-          </nav>
-
-          {/* User Profile & Logout */}
-          <div className="p-4 border-t border-sidebar-border space-y-2">
-            <button className="w-full flex items-center gap-3 px-4 py-2 rounded-lg text-sidebar-foreground hover:bg-sidebar-accent/20 transition-colors">
-              <Settings className="w-4 h-4" />
-              <span className="text-sm">الإعدادات</span>
-            </button>
-            <button
-              onClick={() => navigate("/support")}
-              className="w-full flex items-center gap-3 px-4 py-2 rounded-lg text-sidebar-foreground hover:bg-sidebar-accent/20 transition-colors"
-            >
-              <HelpCircle className="w-4 h-4" />
-              <span className="text-sm">الدعم والتواصل</span>
-            </button>
-            <button
-              onClick={handleLogout}
-              className="w-full flex items-center gap-3 px-4 py-2 rounded-lg text-red-400 hover:bg-red-500/10 transition-colors"
-            >
-              <LogOut className="w-4 h-4" />
-              <span className="text-sm">تسجيل الخروج</span>
-            </button>
           </div>
         </div>
-      </div>
+      </header>
 
       {/* Main Content */}
-      <div className="flex-1 flex flex-col overflow-hidden">
-        {/* Header */}
-        <header className="bg-card border-b border-border px-6 py-4 flex items-center justify-between">
-          <div className="flex items-center gap-4">
-            <button
-              onClick={() => setSidebarOpen(!sidebarOpen)}
-              className="md:hidden p-2 hover:bg-accent/10 rounded-lg transition-colors"
-            >
-              {sidebarOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-            </button>
-            <h2 className="text-2xl font-bold">مرحباً، {user.name}</h2>
+      <div className="container max-w-7xl mx-auto px-4 py-8">
+        {/* Welcome Section */}
+        <div className="mb-12">
+          <div className="bg-gradient-to-r from-amber-500/10 to-orange-500/10 border border-amber-500/20 rounded-2xl p-8">
+            <h2 className="text-3xl font-bold text-white mb-2">مرحباً بك، {user.name || "صديقنا"}! 👋</h2>
+            <p className="text-slate-300">منصة REXO متكاملة لإدارة جميع جوانب تسويقك الرقمي</p>
           </div>
-          <div className="flex items-center gap-4">
-            <div className="text-right">
-              <p className="text-sm font-medium">{user.name}</p>
-              <p className="text-xs text-muted-foreground">{user.email}</p>
-            </div>
-            <div className="w-10 h-10 bg-gradient-to-br from-accent to-secondary rounded-full" />
-          </div>
-        </header>
+        </div>
 
-        {/* Content */}
-        <main className="flex-1 overflow-y-auto p-6">
-          {/* Welcome Card */}
-          <Card className="bg-gradient-to-r from-secondary/10 via-accent/10 to-secondary/10 border-accent/20 p-8 mb-8">
-            <h3 className="text-2xl font-bold mb-2">مرحباً بك في REXO</h3>
-            <p className="text-muted-foreground mb-4">
-              منصتك المتكاملة لإدارة جميع جوانب التسويق الرقمي. اختر من الخدمات أدناه للبدء.
-            </p>
-            <div className="flex gap-4">
-              <Button className="bg-secondary hover:bg-secondary/90 text-secondary-foreground">
-                اعرف المزيد
-              </Button>
-              <Button variant="outline" className="border-accent text-accent hover:bg-accent/10">
-                دليل البدء
-              </Button>
-            </div>
-          </Card>
-
-          {/* Services Grid */}
-          <div className="mb-8">
-            <h3 className="text-xl font-bold mb-6">الخدمات الرئيسية</h3>
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {services.map((service, idx) => (
-                <Card
-                  key={idx}
-                  onClick={() => navigate(service.path)}
-                  className="bg-card border-border hover:border-accent hover:shadow-lg transition-all cursor-pointer p-6 group"
-                >
-                  <div className={`w-12 h-12 bg-gradient-to-br ${service.color} to-accent rounded-lg flex items-center justify-center mb-4 group-hover:scale-110 transition-transform`}>
-                    <service.icon className="w-6 h-6 text-white" />
-                  </div>
-                  <h4 className="font-bold mb-2">{service.label}</h4>
-                  <p className="text-sm text-muted-foreground">
-                    اضغط للدخول إلى هذه الخدمة
-                  </p>
-                </Card>
-              ))}
-            </div>
-          </div>
-
-          {/* Stats */}
-          <div className="grid md:grid-cols-4 gap-6">
-            {[
-              { label: "الحملات النشطة", value: "0", icon: Zap },
-              { label: "المتابعون", value: "0", icon: Users },
-              { label: "الإيرادات الشهرية", value: "0 ر.س", icon: DollarSign },
-              { label: "معدل التحويل", value: "0%", icon: TrendingUp },
-            ].map((stat, idx) => (
-              <Card key={idx} className="bg-card border-border p-6">
-                <div className="flex items-center justify-between">
+        {/* Quick Stats */}
+        <div className="grid md:grid-cols-4 gap-4 mb-12">
+          {stats.map((stat, idx) => {
+            const Icon = stat.icon;
+            return (
+              <Card key={idx} className="bg-slate-800/50 border-slate-700 p-6 hover:border-amber-500/50 transition-all">
+                <div className="flex items-start justify-between">
                   <div>
-                    <p className="text-muted-foreground text-sm">{stat.label}</p>
-                    <p className="text-3xl font-bold mt-2">{stat.value}</p>
+                    <p className="text-slate-400 text-sm mb-2">{stat.label}</p>
+                    <p className="text-2xl font-bold text-white">{stat.value}</p>
                   </div>
-                  <stat.icon className="w-8 h-8 text-accent opacity-50" />
+                  <div className={`p-3 rounded-lg bg-gradient-to-br ${stat.color} text-white`}>
+                    <Icon className="w-5 h-5" />
+                  </div>
                 </div>
               </Card>
-            ))}
+            );
+          })}
+        </div>
+
+        {/* Service Categories */}
+        {filteredCategories.map((category) => {
+          const CategoryIcon = category.icon;
+          return (
+            <div key={category.name} className="mb-12">
+              <div className="flex items-center gap-3 mb-6">
+                <div className={`p-3 rounded-lg bg-gradient-to-br ${category.color} text-white`}>
+                  <CategoryIcon className="w-5 h-5" />
+                </div>
+                <h3 className="text-2xl font-bold text-white">{category.name}</h3>
+              </div>
+
+              <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
+                {category.services.map((service) => {
+                  const ServiceIcon = service.icon;
+                  return (
+                    <Card
+                      key={service.path}
+                      onClick={() => navigate(service.path)}
+                      className="bg-slate-800/50 border-slate-700 p-6 hover:border-amber-500 hover:bg-slate-800 cursor-pointer transition-all group"
+                    >
+                      <div className="flex flex-col items-center text-center gap-4">
+                        <div className={`p-4 rounded-lg bg-gradient-to-br ${service.color} text-white group-hover:scale-110 transition-transform`}>
+                          <ServiceIcon className="w-6 h-6" />
+                        </div>
+                        <div>
+                          <h4 className="font-bold text-white group-hover:text-amber-500 transition-colors">{service.label}</h4>
+                          <p className="text-xs text-slate-400 mt-1">اضغط للدخول</p>
+                        </div>
+                      </div>
+                    </Card>
+                  );
+                })}
+              </div>
+            </div>
+          );
+        })}
+
+        {/* Empty State */}
+        {filteredCategories.every((cat) => cat.services.length === 0) && (
+          <div className="text-center py-12">
+            <Search className="w-12 h-12 text-slate-600 mx-auto mb-4" />
+            <p className="text-slate-400">لم نجد خدمات تطابق البحث</p>
           </div>
-        </main>
+        )}
       </div>
     </div>
   );

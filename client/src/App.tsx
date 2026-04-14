@@ -19,6 +19,9 @@ import Reviews from "./pages/Reviews";
 import Settings from "./pages/Settings";
 import Orders from "./pages/Orders";
 import Accounting from "./pages/Accounting";
+import Templates from "./pages/Templates";
+import MarketingPhrasesNew from "./pages/MarketingPhrasesNew";
+import ProductEditor from "./pages/ProductEditor";
 
 function Router() {
   // make sure to consider if you need authentication for certain routes
@@ -39,6 +42,9 @@ function Router() {
       <Route path={"/settings"} component={Settings} />
       <Route path={"/orders"} component={Orders} />
       <Route path={"/accounting"} component={Accounting} />
+      <Route path={"/templates"} component={Templates} />
+      <Route path={"/marketing-phrases-new"} component={MarketingPhrasesNew} />
+      <Route path={"/product-editor"} component={ProductEditor} />
       <Route path={"/404"} component={NotFound} />
       {/* Final fallback route */}
       <Route component={NotFound} />
