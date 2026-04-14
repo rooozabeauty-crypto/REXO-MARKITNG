@@ -50,14 +50,14 @@ export default function Dashboard() {
   const services = [
     { icon: Search, label: "تحسين محرك البحث", path: "/marketing-phrases", color: "from-blue-500" },
     { icon: BarChart3, label: "تحليل الأداء", path: "/analytics", color: "from-green-500" },
-    { icon: PieChart, label: "دراسة السوق", path: "/marketing-phrases", color: "from-purple-500" },
+    { icon: Settings, label: "الإعدادات", path: "/settings", color: "from-slate-500" },
     { icon: Palette, label: "Poster Maker", path: "/poster-maker", color: "from-pink-500" },
     { icon: MessageSquare, label: "المساعد الذكي لورا", path: "/lora", color: "from-yellow-500" },
     { icon: DollarSign, label: "المحاسب المالي", path: "/marketing-phrases", color: "from-emerald-500" },
     { icon: Package, label: "مخزون المتجر", path: "/inventory", color: "from-cyan-500" },
     { icon: Share2, label: "وسائل التواصل", path: "/social-media", color: "from-red-500" },
     { icon: Zap, label: "الحملات الإعلانية", path: "/campaigns", color: "from-orange-500" },
-    { icon: Star, label: "التقييمات والتعليقات", path: "/marketing-phrases", color: "from-indigo-500" },
+    { icon: Star, label: "التقييمات والتعليقات", path: "/reviews", color: "from-indigo-500" },
     { icon: Mail, label: "التواصل مع المؤثرين", path: "/marketing-phrases", color: "from-rose-500" },
     { icon: CreditCard, label: "الاشتراكات", path: "/subscriptions", color: "from-violet-500" },
   ];

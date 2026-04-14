@@ -15,6 +15,8 @@ import Analytics from "./pages/Analytics";
 import Campaigns from "./pages/Campaigns";
 import Inventory from "./pages/Inventory";
 import SocialMedia from "./pages/SocialMedia";
+import Reviews from "./pages/Reviews";
+import Settings from "./pages/Settings";
 
 function Router() {
   // make sure to consider if you need authentication for certain routes
@@ -31,6 +33,8 @@ function Router() {
       <Route path={"/campaigns"} component={Campaigns} />
       <Route path={"/inventory"} component={Inventory} />
       <Route path={"/social-media"} component={SocialMedia} />
+      <Route path={"/reviews"} component={Reviews} />
+      <Route path={"/settings"} component={Settings} />
       <Route path={"/404"} component={NotFound} />
       {/* Final fallback route */}
       <Route component={NotFound} />
