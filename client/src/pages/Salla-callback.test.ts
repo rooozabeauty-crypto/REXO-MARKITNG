@@ -32,7 +32,7 @@ describe("Salla OAuth Callback", () => {
   });
 
   it("يجب أن يكون Callback URL صحيحاً", () => {
-    const callbackUrl = "https://rexo-markitng.onrender.com/callback
+    const callbackUrl = "https://rexo-markitng.onrender.com/callback/
     expect(callbackUrl).toContain("rexomarketing");
     expect(callbackUrl).toContain("callback");
     expect(callbackUrl).toMatch(/^https:\/\//);
