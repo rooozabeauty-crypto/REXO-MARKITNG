@@ -13,6 +13,8 @@ import Subscriptions from "./pages/Subscriptions";
 import Support from "./pages/Support";
 import Analytics from "./pages/Analytics";
 import Campaigns from "./pages/Campaigns";
+import Inventory from "./pages/Inventory";
+import SocialMedia from "./pages/SocialMedia";
 
 function Router() {
   // make sure to consider if you need authentication for certain routes
@@ -27,6 +29,8 @@ function Router() {
       <Route path={"/support"} component={Support} />
       <Route path={"/analytics"} component={Analytics} />
       <Route path={"/campaigns"} component={Campaigns} />
+      <Route path={"/inventory"} component={Inventory} />
+      <Route path={"/social-media"} component={SocialMedia} />
       <Route path={"/404"} component={NotFound} />
       {/* Final fallback route */}
       <Route component={NotFound} />
