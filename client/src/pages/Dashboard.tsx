@@ -57,7 +57,7 @@ export default function Dashboard() {
         { icon: Search, label: "تحسين محرك البحث", path: "/marketing-phrases", color: "from-blue-500" },
         { icon: Zap, label: "الحملات الإعلانية", path: "/campaigns", color: "from-orange-500" },
         { icon: Share2, label: "وسائل التواصل", path: "/social-media", color: "from-red-500" },
-        { icon: MessageSquare, label: "المساعد الذكي لورا", path: "/lora", color: "from-yellow-500" },
+        { icon: MessageSquare, label: "المساعد الذكي لورا", path: "/lora-advanced", color: "from-yellow-500" },
       ],
     },
     {
