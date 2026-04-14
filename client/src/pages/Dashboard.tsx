@@ -53,12 +53,12 @@ export default function Dashboard() {
     { icon: Settings, label: "الإعدادات", path: "/settings", color: "from-slate-500" },
     { icon: Palette, label: "Poster Maker", path: "/poster-maker", color: "from-pink-500" },
     { icon: MessageSquare, label: "المساعد الذكي لورا", path: "/lora", color: "from-yellow-500" },
-    { icon: DollarSign, label: "المحاسب المالي", path: "/marketing-phrases", color: "from-emerald-500" },
+    { icon: DollarSign, label: "المحاسب المالي", path: "/accounting", color: "from-emerald-500" },
     { icon: Package, label: "مخزون المتجر", path: "/inventory", color: "from-cyan-500" },
     { icon: Share2, label: "وسائل التواصل", path: "/social-media", color: "from-red-500" },
     { icon: Zap, label: "الحملات الإعلانية", path: "/campaigns", color: "from-orange-500" },
     { icon: Star, label: "التقييمات والتعليقات", path: "/reviews", color: "from-indigo-500" },
-    { icon: Mail, label: "التواصل مع المؤثرين", path: "/marketing-phrases", color: "from-rose-500" },
+    { icon: Mail, label: "الطلبات والمبيعات", path: "/orders", color: "from-rose-500" },
     { icon: CreditCard, label: "الاشتراكات", path: "/subscriptions", color: "from-violet-500" },
   ];
 
