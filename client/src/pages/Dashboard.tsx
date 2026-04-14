@@ -80,6 +80,7 @@ export default function Dashboard() {
         { icon: MessageSquare, label: "العبارات التسويقية", path: "/marketing-phrases-new", color: "from-indigo-500" },
         { icon: Star, label: "القوالب الجاهزة", path: "/templates", color: "from-yellow-500" },
         { icon: Users, label: "محرر المنتجات", path: "/product-editor", color: "from-blue-500" },
+        { icon: Palette, label: "محرر الصور والمنتجات", path: "/image-editor", color: "from-purple-500" },
       ],
     },
     {

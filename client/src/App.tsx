@@ -23,6 +23,7 @@ import Templates from "./pages/Templates";
 import MarketingPhrasesNew from "./pages/MarketingPhrasesNew";
 import ProductEditor from "./pages/ProductEditor";
 import LoraAdvanced from "./pages/LoraAdvanced";
+import ImageEditor from "./pages/ImageEditor";
 
 function Router() {
   // make sure to consider if you need authentication for certain routes
@@ -47,6 +48,7 @@ function Router() {
       <Route path={"/marketing-phrases-new"} component={MarketingPhrasesNew} />
       <Route path={"/product-editor"} component={ProductEditor} />
       <Route path={"/lora-advanced"} component={LoraAdvanced} />
+      <Route path={"/image-editor"} component={ImageEditor} />
       <Route path={"/404"} component={NotFound} />
       {/* Final fallback route */}
       <Route component={NotFound} />
